@@ -1,0 +1,9 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 40px;
+  
+  @screen md {
+    grid-template-columns: 1fr 1fr;
+  }
+}

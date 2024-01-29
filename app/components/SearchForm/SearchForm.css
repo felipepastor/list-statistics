@@ -1,3 +1,7 @@
-.input-bordered, .input {
-  @apply bg-black;
+.input {
+  @apply rounded-none;
+}
+
+.btn {
+  @apply rounded-none;
 }

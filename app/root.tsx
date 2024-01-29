@@ -9,6 +9,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import stylesheet from "~/tailwind.css";
+import { HeaderApp } from "~/components/HeaderApp/HeaderApp";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -32,6 +33,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <HeaderApp />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

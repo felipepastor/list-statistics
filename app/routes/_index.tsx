@@ -1,6 +1,5 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { HeaderApp } from "~/components/HeaderApp/HeaderApp";
 import {
   SearchForm,
   links as primaryButtonLinks,
@@ -20,20 +19,16 @@ export const links: LinksFunction = () => [...primaryButtonLinks()];
 export async function loader() {
   const results = await getResults();
   return results;
+  // return null;
 }
 
 export default function Index() {
   const results = useLoaderData<typeof loader>();
 
-  console.log(results);
-
   return (
-    <>
-      <HeaderApp />
-      <main className="container mx-auto">
-        <SearchForm />
-        <SearchList results={results} />
-      </main>
-    </>
+    <main className="container mx-auto">
+      <SearchForm />
+      <SearchList results={results} />
+    </main>
   );
 }
