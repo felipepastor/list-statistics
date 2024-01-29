@@ -1,41 +1,39 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { HeaderApp } from "~/components/HeaderApp/HeaderApp";
+import {
+  SearchForm,
+  links as primaryButtonLinks,
+} from "~/components/SearchForm/SearchForm";
+import { SearchList } from "~/components/SearchList/SearchList";
+import { getResults } from "~/data/results";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Statista FE Code Challenge" },
+    { name: "description", content: "Statista FE Code Challenge" },
   ];
 };
 
+export const links: LinksFunction = () => [...primaryButtonLinks()];
+
+export async function loader() {
+  const results = await getResults();
+  return results;
+}
+
 export default function Index() {
+  const results = useLoaderData<typeof loader>();
+
+  console.log(results);
+
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <>
+      <HeaderApp />
+      <main className="container mx-auto">
+        <SearchForm />
+        <SearchList results={results} />
+      </main>
+    </>
   );
 }

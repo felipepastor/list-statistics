@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.statistaLogoSvg__path {
+  fill: #fff;
+}

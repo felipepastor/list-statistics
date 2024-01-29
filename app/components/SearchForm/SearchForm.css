@@ -1,0 +1,3 @@
+.input-bordered, .input {
+  @apply bg-black;
+}
