@@ -22,7 +22,7 @@ export async function getResults(
   page?: number,
   pageSize?: number
 ): Promise<{ results: SearchResult[]; totalResults: number }> {
-  const rawFileContent = await fs.readFile("app/data/searchResults.json", {
+  const rawFileContent = await fs.readFile("./app/data/searchResults.json", {
     encoding: "utf-8",
   });
 
