@@ -1,5 +1,10 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { Pagination } from "~/components/Pagination/Pagination";
 import {
   SearchForm,
   links as primaryButtonLinks,
@@ -16,19 +21,36 @@ export const meta: MetaFunction = () => {
 
 export const links: LinksFunction = () => [...primaryButtonLinks()];
 
-export async function loader() {
-  const results = await getResults();
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const query = url.searchParams.get("searchQuery") || "";
+  const page = parseInt(url.searchParams.get("page") || "1");
+
+  const results = await getResults(query, page);
+
   return results;
-  // return null;
 }
 
 export default function Index() {
-  const results = useLoaderData<typeof loader>();
+  const { results, totalResults } = useLoaderData<typeof loader>();
 
   return (
-    <main className="container mx-auto">
+    <main className="container mx-auto mb-10">
       <SearchForm />
-      <SearchList results={results} />
+      {results && results?.length > 0 ? (
+        <>
+          <SearchList results={results} />
+          <section className="flex justify-center items-center">
+            <Pagination totalResults={totalResults} />
+          </section>
+        </>
+      ) : (
+        <section className="flex max-w-full justify-center items-center prose">
+          <h3 className="text-center">
+            No results found, please search first.
+          </h3>
+        </section>
+      )}
     </main>
   );
 }

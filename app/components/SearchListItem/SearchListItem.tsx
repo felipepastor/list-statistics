@@ -1,9 +1,13 @@
-import { Link } from "@remix-run/react";
+import { Link, useSearchParams } from "@remix-run/react";
 import { type SearchResult } from "~/data/results";
 
 export const SearchListItem = (props: SearchResult) => {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("searchQuery") || "";
+  const page = searchParams.get("page") || "1";
+
   return (
-    <Link to={`/${props.identifier}`}>
+    <Link to={`/${props.identifier}?searchQuery=${searchQuery}&page=${page}`}>
       <div className="grid grid-cols-[200px_auto] h-[240px] max-w-full w-full gap-x-4 p-3 border border-gray-200 rounded-md shadow-md hover:shadow-lg prose">
         <figure className="mb-0">
           <img
@@ -16,7 +20,7 @@ export const SearchListItem = (props: SearchResult) => {
           </figcaption>
         </figure>
         <section className="flex flex-col">
-          <h3 className="m-0">{props.title}</h3>
+          <h3 className="m-0 break-all">{props.title}</h3>
           <p className="text-sm">{props.subject}</p>
         </section>
       </div>

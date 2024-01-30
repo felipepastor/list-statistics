@@ -17,11 +17,29 @@ export type TeaserImageUrl = {
   src: string;
 };
 
-export async function getResults(): Promise<SearchResult[]> {
+export async function getResults(
+  query = "",
+  page = 1,
+  pageSize = 10
+): Promise<{ results: SearchResult[]; totalResults: number }> {
   const rawFileContent = await fs.readFile("app/data/searchResults.json", {
     encoding: "utf-8",
   });
+
   const data = JSON.parse(rawFileContent);
-  const storedResults = data.items ?? [];
-  return storedResults;
+
+  const filteredResults =
+    data?.items?.filter((item: SearchResult) =>
+      item.title.toLowerCase().includes(query.toLocaleLowerCase())
+    ) ?? [];
+
+  const totalResults = filteredResults.length;
+
+  // Calculate start and end index for the slice method
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+
+  const storedResults = filteredResults.slice(startIndex, endIndex);
+
+  return { results: storedResults, totalResults };
 }

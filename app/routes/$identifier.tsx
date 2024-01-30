@@ -1,10 +1,5 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import {
-  Link,
-  useLoaderData,
-  isRouteErrorResponse,
-  useRouteError,
-} from "@remix-run/react";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { getResults } from "~/data/results";
 import styles from "~/styles/$identifier.css";
 import { formatDate } from "~/utils/formatDate";
@@ -14,7 +9,10 @@ export function links() {
   return [{ rel: "stylesheet", href: styles }];
 }
 
-export default function NoteDetailsPage() {
+export default function DetailsPage() {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("searchQuery") || "";
+  const page = searchParams.get("page") || "1";
   const result = useLoaderData<typeof loader>();
 
   if (!result) return null;
@@ -25,7 +23,7 @@ export default function NoteDetailsPage() {
     <main className="container mx-auto">
       <Link
         className="mb-4 inline-block"
-        to={"/"}
+        to={`/?searchQuery=${searchQuery}&page=${page}`}
       >
         <ArrowLeftShort />
       </Link>
@@ -51,14 +49,14 @@ export default function NoteDetailsPage() {
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const results = await getResults();
+  const resultsJson = await getResults();
   const id = params.identifier;
 
   if (!id) {
     return null;
   }
 
-  const findResult = results.find(
+  const findResult = resultsJson.results.find(
     (result) => result.identifier === parseInt(id)
   );
 
@@ -70,38 +68,4 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   return findResult;
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-
-  if (isRouteErrorResponse(error)) {
-    return (
-      <main className="container mx-auto">
-        <Link
-          className="mb-4 inline-block"
-          to={"/"}
-        >
-          <FaArrowLeft className="text-[20px]" />
-        </Link>
-        <section className="prose flex justify-center max-w-full">
-          <h2 className="flex">
-            {error.status} {error.statusText}
-          </h2>
-          <p>{error.data}</p>
-        </section>
-      </main>
-    );
-  } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>ERROR!!!</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
-  } else {
-    return <h1>Unknown Error</h1>;
-  }
 }
