@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const query = url.searchParams.get("searchQuery") || "";
   const page = parseInt(url.searchParams.get("page") || "1");
 
-  const results = await getResults(query, page);
+  const results = await getResults(query, page, 10);
 
   return results;
 }

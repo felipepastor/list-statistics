@@ -20,8 +20,6 @@ export const Pagination = ({
   const prevPage = page - 1;
   const nextPage = page + 1;
 
-  console.log(totalPages);
-
   return (
     <div className="join">
       {!isFirstPage && (
