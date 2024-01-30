@@ -1,6 +1,6 @@
 import { LOCAL_STORAGE_KEY } from "./const";
 
-export function setFavoriteItems(item: string) {
+export function setFavoriteItem(item: string) {
   const favoriteItems = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
   );
