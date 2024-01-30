@@ -1,4 +1,4 @@
-import fs from "fs/promises";
+import rawFileContent from "~/data/searchResults.json";
 
 export type SearchResult = {
   identifier: number;
@@ -22,11 +22,7 @@ export async function getResults(
   page?: number,
   pageSize?: number
 ): Promise<{ results: SearchResult[]; totalResults: number }> {
-  const rawFileContent = await fs.readFile("searchResults.json", {
-    encoding: "utf-8",
-  });
-
-  const data = JSON.parse(rawFileContent);
+  const data = rawFileContent;
 
   const filteredResults =
     data?.items?.filter((item: SearchResult) =>
