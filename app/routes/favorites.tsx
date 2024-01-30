@@ -62,7 +62,7 @@ const FavoritesPage = () => {
       ) : (
         <section className="flex max-w-full justify-center items-center prose">
           <h3 className="text-center">
-            No results found, please search first.
+            Please, save first some statistic as your favorite.
           </h3>
         </section>
       )}
