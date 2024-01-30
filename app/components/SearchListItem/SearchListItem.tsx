@@ -1,20 +1,14 @@
-import { Link, useSearchParams } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import { type SearchResult } from "~/data/results";
 import { FavoriteButton } from "../FavoriteButton/FavoriteButton";
 
 export const SearchListItem = (
   props: SearchResult & { onFavoriteButtonClick: () => void }
 ) => {
-  const [searchParams] = useSearchParams();
-  const searchQuery = searchParams.get("searchQuery") || "";
-  const page = searchParams.get("page") || "1";
-
   const { onFavoriteButtonClick } = props;
 
   return (
-    <Link
-      to={`/statistic/${props.identifier}?searchQuery=${searchQuery}&page=${page}`}
-    >
+    <Link to={`/statistic/${props.identifier}`}>
       <div className="relative grid grid-cols-[200px_auto] h-[240px] max-w-full w-full gap-x-4 p-3 border border-gray-200 rounded-md shadow-md hover:shadow-lg prose">
         <figure className="mb-0 mt-0">
           <img
