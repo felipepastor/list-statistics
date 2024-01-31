@@ -21,7 +21,7 @@ export async function getStatistics(
   pageSize?: number
 ): Promise<{ results: SearchResult[]; totalResults: number }> {
   const response = await fetch(
-    `http://localhost:3000/api/statistics?searchQuery=${query}&page=${page}&pageSize=${pageSize}`
+    `${process.env.HOST_URL}/api/statistics?searchQuery=${query}&page=${page}&pageSize=${pageSize}`
   );
   const data = await response.json();
 
@@ -31,7 +31,9 @@ export async function getStatistics(
 export async function getStatistic(
   id: string
 ): Promise<{ result: SearchResult }> {
-  const response = await fetch(`http://localhost:3000/api/statistic?id=${id}`);
+  const response = await fetch(
+    `${process.env.HOST_URL}/api/statistic?id=${id}`
+  );
   const data = await response.json();
 
   return data;
@@ -42,7 +44,7 @@ export async function getFavorites(localStorage: string[]): Promise<{
   totalResults: number;
 }> {
   const response = await fetch(
-    `http://localhost:3000/api/statistics?favorites=${JSON.stringify(
+    `${window.ENV.HOST_URL}/api/favorites?favorites=${JSON.stringify(
       localStorage
     )}`
   );

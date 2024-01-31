@@ -7,15 +7,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const query = url.searchParams.get("searchQuery") || "";
   const page = parseInt(url.searchParams.get("page") || "1");
   const pageSize = parseInt(url.searchParams.get("pageSize") || "10");
-  const favorites = JSON.parse(url.searchParams.get("favorites") || "[]");
-
-  if (favorites && favorites.length) {
-    const favoriteResults = data?.items?.filter((result) =>
-      favorites.includes(result.identifier.toString())
-    );
-
-    return { results: favoriteResults, totalResults: favoriteResults?.length };
-  }
 
   const filteredResults =
     data?.items?.filter((item: SearchResult) =>

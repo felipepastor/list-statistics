@@ -39,18 +39,21 @@ const FavoritesPage = () => {
 
   return (
     <main className="container mx-auto mb-10">
-      <Link
-        className="mb-4 inline-block"
-        to={`/`}
-        onClick={(e) => {
-          e.preventDefault();
-          navigate(-1);
-        }}
-      >
-        <button className="btn btn-circle btn-ghost">
-          <ArrowLeftShort />
-        </button>
-      </Link>
+      <header className="flex justify-start items-center prose max-w-full mb-8">
+        <Link
+          className="inline-block"
+          to={`/`}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          <button className="btn btn-circle btn-ghost">
+            <ArrowLeftShort />
+          </button>
+        </Link>
+        <h2 className="mx-auto m-0">Favorites</h2>
+      </header>
       {results && results?.length ? (
         <section className="flex justify-center items-center">
           <SearchList

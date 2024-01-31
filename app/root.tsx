@@ -9,11 +9,19 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  json,
+  useLoaderData,
   useRouteError,
 } from "@remix-run/react";
 import stylesheet from "~/tailwind.css";
 import { HeaderApp } from "~/components/HeaderApp/HeaderApp";
 import { ArrowLeftShort } from "./components/icons";
+
+declare global {
+  interface Window {
+    ENV: { HOST_URL: string };
+  }
+}
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -24,7 +32,17 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader() {
+  return json({
+    ENV: {
+      HOST_URL: process.env.HOST_URL,
+    },
+  });
+}
+
 export default function App() {
+  const data = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
@@ -42,6 +60,11 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+          }}
+        />
       </body>
     </html>
   );
