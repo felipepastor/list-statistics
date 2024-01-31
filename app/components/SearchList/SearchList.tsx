@@ -6,7 +6,7 @@ export const SearchList = ({
   onFavoriteButtonClick,
 }: {
   results: SearchResult[] | null;
-  onFavoriteButtonClick: () => void;
+  onFavoriteButtonClick?: () => void;
 }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">

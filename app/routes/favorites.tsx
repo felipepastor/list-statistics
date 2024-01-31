@@ -1,9 +1,9 @@
 import { MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData, useNavigate } from "@remix-run/react";
-import { useState } from "react";
+import { Link, useNavigate } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { SearchList } from "~/components/SearchList/SearchList";
 import { ArrowLeftShort } from "~/components/icons";
-import { SearchResult, getResults } from "~/data/results";
+import { SearchResult, getFavorites } from "~/services/api";
 import { getFavoriteItems } from "~/utils/getFavoriteItems";
 
 export const meta: MetaFunction = () => {
@@ -14,8 +14,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
-  const results = getResults();
-  return results;
+  return null;
 }
 
 function filterFavorites(results: SearchResult[], favoriteIds: string[]) {
@@ -26,12 +25,17 @@ function filterFavorites(results: SearchResult[], favoriteIds: string[]) {
 
 const FavoritesPage = () => {
   const navigate = useNavigate();
-  const { results } = useLoaderData<typeof loader>();
 
-  const allFavoriteItems = getFavoriteItems();
-  const [favoriteResultsFiltered, setFavoriteResultsFiltered] = useState(
-    filterFavorites(results, allFavoriteItems)
-  );
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const localStorageResults = getFavoriteItems();
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      const data = await getFavorites(localStorageResults);
+      setResults(data.results);
+    };
+    fetchResults();
+  }, []);
 
   return (
     <main className="container mx-auto mb-10">
@@ -47,15 +51,13 @@ const FavoritesPage = () => {
           <ArrowLeftShort />
         </button>
       </Link>
-      {favoriteResultsFiltered && favoriteResultsFiltered?.length ? (
+      {results && results?.length ? (
         <section className="flex justify-center items-center">
           <SearchList
-            results={favoriteResultsFiltered}
+            results={results}
             onFavoriteButtonClick={() => {
               const finalFiltered = getFavoriteItems();
-              setFavoriteResultsFiltered(
-                filterFavorites(results, finalFiltered)
-              );
+              setResults(filterFavorites(results, finalFiltered));
             }}
           />
         </section>

@@ -3,7 +3,7 @@ import { type SearchResult } from "~/data/results";
 import { FavoriteButton } from "../FavoriteButton/FavoriteButton";
 
 export const SearchListItem = (
-  props: SearchResult & { onFavoriteButtonClick: () => void }
+  props: SearchResult & { onFavoriteButtonClick?: () => void }
 ) => {
   const { onFavoriteButtonClick } = props;
 

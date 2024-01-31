@@ -10,7 +10,7 @@ import {
   links as primaryButtonLinks,
 } from "~/components/SearchForm/SearchForm";
 import { SearchList } from "~/components/SearchList/SearchList";
-import { getResults } from "~/data/results";
+import { getStatistics } from "~/services/api";
 
 export const meta: MetaFunction = () => {
   return [
@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const query = url.searchParams.get("searchQuery") || "";
   const page = parseInt(url.searchParams.get("page") || "1");
 
-  const results = await getResults(query, page, 10);
+  const results = await getStatistics(query, page, 10);
 
   return results;
 }

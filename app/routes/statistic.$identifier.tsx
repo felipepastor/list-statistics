@@ -5,7 +5,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "@remix-run/react";
-import { getResults } from "~/data/results";
+import { getStatistic } from "~/services/api";
 import styles from "~/styles/$identifier.css";
 import { formatDate } from "~/utils/formatDate";
 import { ArrowLeftShort } from "~/components/icons";
@@ -72,23 +72,16 @@ export default function DetailsPage() {
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const resultsJson = await getResults();
   const id = params.identifier;
 
-  if (!id) {
-    return null;
-  }
+  const { result } = await getStatistic(id || "");
 
-  const findResult = resultsJson.results.find((result) => {
-    return result.identifier === parseInt(id);
-  });
-
-  if (!findResult) {
+  if (!id || !result) {
     throw new Response(null, {
       status: 404,
       statusText: "Item not found, please try again.",
     });
   }
 
-  return findResult;
+  return { ...result };
 }
